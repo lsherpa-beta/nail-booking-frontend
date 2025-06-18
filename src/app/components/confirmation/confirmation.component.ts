@@ -9,6 +9,15 @@ import { RouterModule } from '@angular/router';
   templateUrl: './confirmation.component.html',
   styleUrl: './confirmation.component.css'
 })
-export class Confirmation {
+export class ConfirmationComponent {
+  name: string = '';
+  date: string = '';
+  time: string = '';
 
+  constructor() {
+    const state = history.state;
+    this.name = state.name || '';
+    this.date = state.date ? new Date(state.date).toDateString() : '';
+    this.time = state.time || '';
+  }
 }
