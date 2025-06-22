@@ -8,6 +8,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
+import { Booking, BookingService } from '../../services/booking.service';
 
 @Component({
   selector: 'app-booking',
@@ -30,9 +31,13 @@ export class BookingComponent {
   bookingForm: FormGroup;
   timeSlots: string[] = ['10:00 AM', '11:00 AM', '1:00 PM', '2:30 PM', '4:00 PM'];
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(private fb: FormBuilder,
+    private router: Router, 
+    private bookingService: BookingService)
+    {
     this.bookingForm = this.fb.group({
-      name: ['', Validators.required],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
       phone: ['', Validators.required],
       email: [''],
       date: [null, Validators.required],
@@ -40,15 +45,28 @@ export class BookingComponent {
     });
   }
 
+
+
   onSubmit() {
-    if (this.bookingForm.valid) {
-      this.router.navigate(['/confirmation'],{
-        state: this.bookingForm.value
-      });
-      console.log('Booking Details:', this.bookingForm.value);
-      // alert('Booking confirmed!');
-    } else {
-      this.bookingForm.markAllAsTouched();
+    if (this.bookingForm.invalid) {
+    //   this.router.navigate(['/confirmation'],{
+    //     state: this.bookingForm.value
+    //   });
+    //   console.log('Booking Details:', this.bookingForm.value);
+    //   // alert('Booking confirmed!');
+    // } else {
+      this.bookingForm.markAllAsTouched()
+      return;
     }
   }
+  
+  const formValue = this.bookingForm.value;
+
+  booking: Booking = {
+    firstName: formValue.firstName,
+    lastName: '',
+    phoneNbr: Number(formValue.phone),
+    appointmentDate: '',
+    appointmentTime: ''
+  };
 }
